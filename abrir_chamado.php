@@ -43,6 +43,7 @@
                 <div class="col">
                   
                   <form method="post" action="registra_chamado.php">
+                    <!--Usando o método post como o método envio e recuperação de dados do formulário através do PHP-->
                     <div class="form-group">
                       <label>Título</label>
                       <input name="titulo" type="text" class="form-control" placeholder="Título">
