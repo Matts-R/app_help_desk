@@ -62,11 +62,11 @@ fclose($arquivo_chamado);
             <div class="card-body"> 
 
               <? foreach($chamados as $chamado) { ?>
-                <!--Usando um laço de repetição para criar quantos forem necessários de acordo com o tamanho do array-->
+                <!--Usando um laço de repetição para criar quantos cards forem necessários de acordo com o tamanho do array-->
 
                 <?php
                 $dados_chamado = explode('#', $chamado);
-                // Criando um array com as string contidas na string $chamados
+                // Criando um array com as string contidas na string $chamado
 
                 if ($_SESSION['perfil_id'] == 1) {
                   // Verificando se o usuário é administrador ou usuário comum
@@ -80,7 +80,10 @@ fclose($arquivo_chamado);
                 }
 
                 if (count($dados_chamado) < 3) {
-                  // Checando se o array tem ao menos 3 elementos, caso não tenha, isso significa que esta faltando o título, ou categoria ou a descrição. Caso esteja faltando isso significa que ou existe algum erro no registro ou mais provavelmente que seja a última posição do arquivo, que neste caso está em branco e por isso iremos pular essa linha
+                  /* Checando se o array tem ao menos 3 elementos, caso não tenha, isso significa que esta faltando o título, ou categoria ou a 
+                  descrição. Caso esteja faltando isso significa que ou existe algum erro no registro ou mais provavelmente que seja a última posição do arquivo, 
+                  que neste caso está em branco e por isso iremos pular essa linha
+                  */
                   continue;
                 }
                 ?>
