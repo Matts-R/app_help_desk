@@ -1,0 +1,91 @@
+Esse arquivo serve para explicar o motivo de ter movido o script original valida_login.php e o arquivo contendo os chamados para outra página.
+Mesmo esse sendo um projeto simples para testar o que é possível fazer sem usar muitos recursos avançados,
+minha intenção era deixar esse projeto o mais próximo possível de aplicação real, e como o chamados (por estarem em um arquivo de texto) e no script valida_login.php conter "informações importantes" acerca dos logins dos usuários, eu os movi para outro diretório, e usei a função require() para fazer uma referência a eles e "puxar" seus conteúdos para a aplicação. 
+Dessa maneira eles ficam mais protegidos durante a navegação, já que se alguém tentasse de alguma forma ter acesso a eles, não conseguiriam, pois achariam apenas uma função fazendo referência aos mesmos.
+
+MAS PARA NÃO PREJUDICAR O ENTENDIMENTO DE ALGUÉM QUE POSSA ESTAR ALGUM DIA VENDO ESSE SCRPIT. SEGUE ABAIXO A LÓGICA DO SCRIPT valida_login.php.
+
+<?php
+
+session_start(); //Inicializando um sessão
+
+$usuario_autenticado = false;
+//Esse variável serve para auxiliar na autenticação do usuário
+
+$usuario_id = null;
+//Variável contendo a id do usuário, por enquanto null
+
+$perfis = [0 => 'Administrador', 1 => 'Usuario'];
+// // Criando um array com valores para guardarem o id e o tipo do usuário
+// Usuários com id Administrador poderão visualizar todos os chamados
+// Usuários com id Usuario só poderão visualizar os próprios chamados
+
+$usuario_perfil_id = null;
+
+$usuarios_app = [
+  [
+    'id' => 0,
+    'email' => 'matts@teste.com.br',
+    'senha' => '123456',
+    'perfil_id' => 0,
+  ],
+  [
+    'id' => 1,
+    'email' => 'gerente@teste.com.br',
+    'senha' => '123456',
+    'perfil_id' => 0,
+  ],
+  [
+    'id' => 2,
+    'email' => 'user1@teste.com.br',
+    'senha' => '123456',
+    'perfil_id' => 1,
+  ],
+  [
+    'id' => 3,
+    'email' => 'user2@teste.com.br',
+    'senha' => '123456',
+    'perfil_id' => 1,
+  ],
+];
+/*Como esse projeto ainda não possui um banco de dados, foram criados usuários exemplo
+com o intuito de realizar a conferência e validação dos dados.
+*/
+
+foreach ($usuarios_app as $user) {
+  if ($user['email'] == $_POST['email'] && $user['senha'] == $_POST['senha']) {
+    $usuario_autenticado = true;
+    /*Fazendo a verificação do "usuário" recebido pelo método POST e comparando-o com os usuários
+    estáticos criados, caso os dados sejam iguais o valor da variável $usuario_autenticado é alterado.
+    */
+
+    $usuario_id = $user['id'];
+    // Atribuindo a variável $usuario_id o mesmo id do usuário que acabou de logar
+
+    $usuario_perfil_id = $user['perfil_id'];
+    // Atribuindo a variável $usuario_perfil_id o mesmo valor do usuário que acabou de logar, determinando assim quem possui acesso administrativo ou acesso comum.
+  }
+}
+
+if ($usuario_autenticado) {
+  //Caso a variável tenha tido seu valor alterado o login será efetuado com sucesso
+
+  $_SESSION['autenticado'] = 'Autenticado';
+  //Adicionando um valor na super global $_SESSION para realizar um controle de acesso
+
+  $_SESSION['id'] = $usuario_id;
+  // Transformando o valor de $usuario_id em uma variável global
+
+  $_SESSION['perfil_id'] = $usuario_perfil_id;
+  // Transformando o valor de $$usuario_perfil_id em uma variável global
+  
+  header('Location: home.php');
+  // Caso o login seja efetuado com sucesso, o usuário é direcionado à página home.php
+} else {
+  $_SESSION['autenticado'] = 'Nao_Autenticado';
+  header('Location: index.php?login=erro');
+  /*Caso o usuário não seja autenticado, o mesmo será redirecionado para a página de login com a seguinte mensagem sendo enviada como parâmentro 'login=erro' da super global $_GET
+   */
+}
+
+?>
