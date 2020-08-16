@@ -1,4 +1,6 @@
 <? require_once "validador_acesso.php"; ?>
+<!--Utilizando a função require_once que serve para basicamente poder utilizar um script sem ter que escreve-lo
+possibilitando assim reaproveitar o trecho de código que válida o acesso--> 
 
 <html>
   <head>
